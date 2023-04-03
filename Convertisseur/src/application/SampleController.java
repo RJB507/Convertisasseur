@@ -34,7 +34,9 @@ public class SampleController implements Initializable{
 	    private ComboBox<String> cmbT2;
 	   
 	    public ObservableList<String> listT2=FXCollections.observableArrayList("minute", "heure", "jours");
-	   
+	  
+	    private double Temp[]= {1.0,0.0166667,0.00069444583333};
+
 	    @FXML
 	    private ComboBox<String> cmbT1;
 
@@ -62,6 +64,8 @@ public class SampleController implements Initializable{
 
 	    public ObservableList<String> listM1=FXCollections.observableArrayList("livres", "gramme", "kilogramme");
 
+	    private double Masse[]= {1.0,453.592,0.453592};
+	    
 	    @FXML
 	    private Button btn1;
 
@@ -108,9 +112,15 @@ public class SampleController implements Initializable{
 	   @FXML
 	   void CheckText(KeyEvent e)
 	   {
-	   	TextField txt=(TextField)e.getSource();
-	   	//System.out.println(txt.getText());
-	   	checkNum(txt);
+	   	
+	   	TextField txt=(TextField)e.getSource() ;
+	   	txt.textProperty( ).addListener ( (observable, oldValue, newValue) ->
+	   	{
+	   	if(!newValue.matches("^-?[0-9](11.[0-9]+)?5"))
+	   	{
+	   	txt. setText (newValue. replaceAll("[^\\d*\\.\\-]",""));
+	   	}
+	   	});
 	   }
 
 	   @Override
@@ -168,6 +178,28 @@ public class SampleController implements Initializable{
 		   convert(cmbL2, cmbL1, txtL2, txtL1, longeur);
 	   }
 	   
+	   @FXML
+	   void Convertir3() 
+	   {
+		   convert(cmbM1, cmbM2, txtM1, txtM2, Masse);
+	   }
+	
+	   @FXML
+	   void Convertir4() 
+	   {
+		   convert(cmbM2, cmbM1, txtM2, txtM1, Masse);
+	   }
+	   @FXML
+	   void Convertir5() 
+	   {
+		   convert(cmbT1, cmbT2, txtT1, txtT2, Temp);
+	   }
+	
+	   @FXML
+	   void Convertir6() 
+	   {
+		   convert(cmbT2, cmbT1, txtT2, txtT1, Temp);
+	   }
 	
 }
 	   
