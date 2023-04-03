@@ -74,7 +74,7 @@ public class SampleController implements Initializable{
 
 	    private ObservableList<String> listL1=FXCollections.observableArrayList("metre", "centimetre", "kilometre");
 	    
-	    private double longeur[]= {1.0,100.0,0.001};
+	    private double Longeur[]= {1.0,100.0,0.001};
 	    
 	    @FXML
 	    private ComboBox<String> cmbM2;
@@ -169,13 +169,13 @@ public class SampleController implements Initializable{
 	   @FXML
 	   void Convertir1() 
 	   {
-		   convert(cmbL1, cmbL2, txtL1, txtL2, longeur);
+		   convert(cmbL1, cmbL2, txtL1, txtL2, Longeur);
 	   }
 	
 	   @FXML
 	   void Convertir2() 
 	   {
-		   convert(cmbL2, cmbL1, txtL2, txtL1, longeur);
+		   convert(cmbL2, cmbL1, txtL2, txtL1, Longeur);
 	   }
 	   
 	   @FXML
