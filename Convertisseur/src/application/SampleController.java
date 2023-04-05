@@ -6,17 +6,23 @@ import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 
 public class SampleController implements Initializable{
+	
+	@FXML
+		private AnchorPane TabPane; //initialize tout les different partie dans ma scene builder
 	
 	 @FXML
 	    private TextField txtL2;
@@ -33,9 +39,9 @@ public class SampleController implements Initializable{
 	    @FXML
 	    private ComboBox<String> cmbT2;
 	   
-	    public ObservableList<String> listT2=FXCollections.observableArrayList("minute", "heure", "jours");
+	    public ObservableList<String> listT2=FXCollections.observableArrayList("minute", "heure", "jours"); //donne les noms au combo box
 	  
-	    private double Temp[]= {1.0,0.0166667,0.00069444583333};
+	    private double Temp[]= {1.0,0.0166667,0.00069444583333}; //donne les nombre de converteur pour utiliser pour convertir ces different unité
 
 	    @FXML
 	    private ComboBox<String> cmbT1;
@@ -55,7 +61,16 @@ public class SampleController implements Initializable{
 
 	    @FXML
 	    private Button btn2;
-
+	    
+	    @FXML
+	    private Button btnoff1;
+	    
+	    @FXML
+	    private Button btnoff2;
+	    
+	    @FXML
+	    private Button btnoff3;
+	    
 	    @FXML
 	    private Button btn3;
 
@@ -81,53 +96,36 @@ public class SampleController implements Initializable{
 
 	    public ObservableList<String> listM2=FXCollections.observableArrayList("livres", "gramme", "kilogramme");
 
-	
-	   @FXML void Quitter()
-	   {
-	   Alert alert=new Alert(AlertType.CONFIRMATION);
-	     alert.setHeaderText("Confirmation");
-	     alert.setTitle("Sortie");
-	     alert.setContentText("Voudrais tu vraiment quitter");
-	     Optional<ButtonType> result=alert.showAndWait();
-	     if (result.get()==ButtonType.OK)
-	     System.exit(0);
-	     }
-	 
-	   void checkNum(TextField a) {
-	   	try 
-	   	{
-	   	int b = Integer.parseInt(a.getText());
-	   }
-	   	catch(NumberFormatException e)
-	   	{
-	   		Alert alert=new Alert(AlertType.ERROR);
-	   		alert.setHeaderText("Erreur");
-	   		alert.setTitle("Attention");
-	   		alert.setContentText("Entrée numérique seulement");
-	   		alert.show();
-	   		a.requestFocus();
-	   	}
-	   }
-	   
+/*
+ * sa interdit que l'utilisateur puisse ecrire des lettre
+ */
 	   @FXML
 	   void CheckText(KeyEvent e)
 	   {
 	   	
-	   	TextField txt=(TextField)e.getSource() ;
+	   	TextField txt=(TextField)e.getSource() ; //dit au code de seulement faire cette code quand on ecrit dans les text field 
 	   	txt.textProperty( ).addListener ( (observable, oldValue, newValue) ->
 	   	{
-	   	if(!newValue.matches("^-?[0-9](11.[0-9]+)?5"))
+	   	if(!newValue.matches("^-?[0-9](11.[0-9]+)?5")) //si c'est un lettre sa le remplace avec un nombre 
 	   	{
 	   	txt. setText (newValue. replaceAll("[^\\d*\\.\\-]",""));
+	   	{
+	    
+{
+	   	}
+	   	}
+	   
 	   	}
 	   	});
 	   }
-
+/*
+ * dit au combobox de mettre comme option de le premiere unité
+ */
 	   @Override
 	   public void initialize(URL location, ResourceBundle resources)
 	   {
 	   	cmbL1.setItems(listL1);	
-	   	cmbL1.getSelectionModel().selectFirst();
+	   	cmbL1.getSelectionModel().selectFirst(); //dit que le premiere unité et le premiere option dans le combobox
 	   	
 	   	cmbL2.setItems(listL2);	
 	   	cmbL2.getSelectionModel().selectFirst();
@@ -147,16 +145,19 @@ public class SampleController implements Initializable{
 		
 	   private double setTaux(ComboBox<String> a, double tbl[])
 		{
-		   int item=a.getSelectionModel().getSelectedIndex();
-		   double val= tbl[item]; 
+		   int item=a.getSelectionModel().getSelectedIndex(); //item devient le type de unité selectionné
+		   double val= tbl[item]; //cree la proportion avec les nombre de converteur
 		   return val;
 		}
+	   /*
+	    * code pour convertir chaque unité
+	    */
 	   private void convert(ComboBox<String> a, ComboBox<String> b, TextField c, TextField d, double tbl[])
 	   {
 		   
 			   double from=setTaux(a, tbl);
 			   double depart=0;
-			   if(c.getText().length()==0)
+			   if(c.getText().length()==0) //utilise set Taux pour utiliser le math pour convertir les unité
 				   depart=0;
 			   else
 				depart=Double.parseDouble(c.getText());
@@ -169,7 +170,7 @@ public class SampleController implements Initializable{
 	   @FXML
 	   void Convertir1() 
 	   {
-		   convert(cmbL1, cmbL2, txtL1, txtL2, Longeur);
+		   convert(cmbL1, cmbL2, txtL1, txtL2, Longeur); //cree un code pour les text field et combobox pour qu'il puisse parcourire cette code de convertir
 	   }
 	
 	   @FXML
@@ -200,7 +201,26 @@ public class SampleController implements Initializable{
 	   {
 		   convert(cmbT2, cmbT1, txtT2, txtT1, Temp);
 	   }
+	   /*
+	    * code pour cree un boution de fermature pour que l'utlisateur puisse quiter l'application quand-t-il veut
+	    */
+	   @FXML void Quitter() //cree un alert quand tu appuie sur le bouton "ferme"
+	   {
+	   Alert alert=new Alert(AlertType.CONFIRMATION); //cree l'alerte
+	     alert.setHeaderText("Confirmation");
+	     alert.setTitle("Sortie");
+	     alert.setContentText("Voudrais tu vraiment quitter"); //cree le window pour que tu puisse dire ok pour quitter
+	     Optional<ButtonType> result=alert.showAndWait();
+	     if (result.get()==ButtonType.OK)
+	     System.exit(0);
+	     }
+	        
 	
-}
+{
+	  
+	   
+	}
+	}
+
 	   
 
